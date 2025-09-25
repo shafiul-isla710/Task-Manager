@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API\Auth;
 
+
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\API\v1\Auth\ProfileUpdateRequest;
 
 class UserController extends Controller
@@ -16,7 +18,11 @@ class UserController extends Controller
      {
         try{
             $user = $request->user();
-            return $this->success(new UserResource($user),'User profile fetched successfully');
+            $cacheKey = 'user_profile_'.$user->id;
+            $cached = Cache::remember($cacheKey,now()->addDay(),function() use($user){
+                return new UserResource($user);
+            });
+            return $this->success($cached,'User profile fetched successfully');
         }
         catch(\Exception $e){
             Log::error('Profile Error: '.$e->getMessage());
@@ -31,6 +37,8 @@ class UserController extends Controller
             
             $user = $request->user();
             $user->update($request->validated());
+            $cacheKey = 'user_profile_'.$user->id;
+            Cache::put($cacheKey,new UserResource($user),now()->addDay());
             
             return $this->success(new UserResource($user),'User profile updated successfully');
         }
