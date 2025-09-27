@@ -24,6 +24,7 @@ class RegisterRequest extends ApiFormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:3000'
         ];
     }
 }

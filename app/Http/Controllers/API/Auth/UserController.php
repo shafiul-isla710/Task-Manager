@@ -33,8 +33,6 @@ class UserController extends Controller
      public function updateProfile(ProfileUpdateRequest $request)
      {
         try{
-
-            
             $user = $request->user();
             $user->update($request->validated());
             $cacheKey = 'user_profile_'.$user->id;

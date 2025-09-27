@@ -16,7 +16,13 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         try{
-            $user = User::create($request->validated());
+            $data = $request->validated();
+            if($request->hasFile('profile_image')){
+                $imagePath = $request->file('profile_image')->store('profile_images','public');
+                $data['profile_image'] = $imagePath;
+            }
+            $user = User::create($data);
+                
             return $this->success(new UserResource($user),'User registered successfully',201);
         }
         catch (\Exception $e){
