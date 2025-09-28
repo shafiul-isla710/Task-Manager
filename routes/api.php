@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Auth\UserController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
-
-Route::post('/v1/register', [AuthController::class, 'register']);
+use App\Http\Controllers\API\TaskController;
 
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix'=>'auth'],function(){
@@ -22,6 +21,10 @@ Route::group(['prefix' => 'v1'], function () {
             Route::put('profile/update',[UserController::class,'updateProfile']);
             Route::delete('logout',[AuthController::class,'logout']);
         });
+    });
+
+    Route::group(['middleware'=>'auth:sanctum'],function(){
+        Route::resource('tasks',TaskController::class);
     });
 
 });
