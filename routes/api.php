@@ -6,6 +6,7 @@ use App\Http\Controllers\API\TaskController;
 use App\Http\Controllers\API\GroupController;
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Auth\UserController;
+use App\Http\Controllers\API\GroupUserController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 
 Route::group(['prefix' => 'v1'], function () {
@@ -26,8 +27,13 @@ Route::group(['prefix' => 'v1'], function () {
     
     //resource routes for tasks and groups
     Route::group(['middleware'=>'auth:sanctum'],function(){
-        Route::resource('tasks',TaskController::class);
-        Route::resource('groups',GroupController::class);
+        Route::apiResource('tasks',TaskController::class);
+        Route::apiResource('groups',GroupController::class);
+
+        Route::post('groups/user/{id}',[GroupUserController::class, 'store']);
+        Route::get('groups/{group}/user',[GroupUserController::class, 'list']);
+        Route::delete('groups/{group}/user/{user_id}',[GroupUserController::class, 'removeUser']);
     });
+
 
 });
