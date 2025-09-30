@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 class GroupUserController extends Controller
 {
+    //list users in a group
     public function list(Request $request, Group $group)
     {
         try{
@@ -21,6 +22,8 @@ class GroupUserController extends Controller
             return $this->error(['Failed to remove user from group'], 500);
         }
     }
+
+    //add user(s) to a group
     public function store(Request $request, $id)
     {
         try{
@@ -59,8 +62,7 @@ class GroupUserController extends Controller
         }
     }
 
-    
-
+    //remove user from a group
     public function removeUser(Request $request, Group $group, $user_id)
     {
         try{
