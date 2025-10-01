@@ -64,4 +64,28 @@ class AuthController extends Controller
             return $this->error();
         }
     }
+
+    public function searchUser(Request $request)
+    {
+        try{
+            $searchData = $request->validate([
+                'name' => 'required',
+            ]);
+            session()->put('searchData', $searchData);
+            $query = User::query();
+
+            if($request->filled('name')){
+                $query->where(function($q) use($request){
+                    $q->where('name','like','%'.$request->name.'%');
+                });
+            }
+
+            $users = $query->get();
+            return $this->success($users,'Users fetched successfully');
+        }
+        catch (\Exception $e){
+            Log::error('Search Error: ' .$e->getMessage());
+            return $this->error();
+        }
+    }
 }

@@ -7,12 +7,14 @@ use App\Http\Controllers\API\GroupController;
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Auth\UserController;
 use App\Http\Controllers\API\GroupUserController;
+use App\Http\Controllers\API\TaskAssignmentController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix'=>'auth'],function(){
         Route::post('register',[AuthController::class,'register']);
         Route::post('login',[AuthController::class,'login']);
+        Route::get('user/search',[AuthController::class,'searchUser']);
 
         Route::post('send-otp',[ForgotPasswordController::class,'sendOtp']);
         Route::post('verify-otp',[ForgotPasswordController::class,'verifyOtp']);
@@ -33,6 +35,10 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('groups/user/{id}',[GroupUserController::class, 'store']);
         Route::get('groups/{group}/user',[GroupUserController::class, 'list']);
         Route::delete('groups/{group}/user/{user_id}',[GroupUserController::class, 'removeUser']);
+        
+        //task assignment
+        Route::post('tasks/{task}/assign',[TaskAssignmentController::class,'store']);
+        Route::get('tasksAssignments',[TaskAssignmentController::class,'index']);
     });
 
 
