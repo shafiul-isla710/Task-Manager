@@ -19,10 +19,11 @@ class TaskController extends Controller
     {
         try{
 
-            $perPage = min(100,(int) request()->query('per_page', 10));
-            $query = Task::query();
+            // $perPage = min(100,(int) request()->query('per_page', 20));
+            // $query = Task::query();
 
-            $tasks = $query->latest('created_at')->paginate($perPage);
+            // $tasks = $query->latest('created_at')->paginate($perPage);
+            $tasks = Task::orderBy('created_at','desc')->paginate(3);
 
             return $this->success($tasks,'Tasks fetched successfully');
         }
