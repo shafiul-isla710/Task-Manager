@@ -23,9 +23,9 @@ class GroupUpdateRequest extends ApiFormRequest
     public function rules(): array
     {
         return [
-            'name'=>['sometimes','nullable','string','max:255',Rule::unique('groups','name')->ignore($this->group->id)],
+            'name'=>['sometimes','required','string','max:255',Rule::unique('groups','name')->ignore($this->group->id)],
             'title'=>['sometimes','nullable','string','max:255'],
-            'status'=>['sometimes','nullable','string','in:1,0'],
+            'status'=>['sometimes','nullable','boolean','in:1,0'],
         ];
     }
 }

@@ -13,5 +13,10 @@ class Group extends Model
         return $this->belongsToMany(User::class, 'group_user', 'group_id', 'user_id');
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+
     
 }

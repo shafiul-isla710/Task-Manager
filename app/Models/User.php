@@ -59,4 +59,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
+
+    //scope 
+    public function scopeUser($query)
+    {
+        return $query->where('type','user');
+    }
 }
