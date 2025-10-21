@@ -65,4 +65,14 @@ class User extends Authenticatable
     {
         return $query->where('type','user');
     }
+
+    public static function designation(){
+        return [
+            'viewer',
+            'UX Designer',
+            'Web Developer',
+            'Web Designer',
+            'Apps Developer',
+        ];
+    }
 }

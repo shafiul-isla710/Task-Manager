@@ -41,7 +41,10 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('tasksAssignments',[TaskAssignmentController::class,'index']);
 
         //member controller
-        Route::get('members',[MemberController::class,'getMember']);
+        Route::get('members',[MemberController::class,'getMembers']);
+        //get single member
+        Route::get('member/{id}',[MemberController::class,'member']);
+        Route::put('member/{id}',[MemberController::class,'setDesignation']);
     });
 
 
