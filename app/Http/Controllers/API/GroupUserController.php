@@ -13,13 +13,33 @@ class GroupUserController extends Controller
     public function list(Request $request, Group $group)
     {
         try{
-            $per_page = min(100,(int) $request->get('per_page', 15));
-            $groupUsers = $group->users()->paginate($per_page);
+            // $per_page = min(100,(int) $request->get('per_page', 15));
+            $groupUsers = $group->users()->get();
             return $this->success($groupUsers, 'Users from group fetched successfully');
         }
         catch(\Exception $e){
             Log::error('Error show user from group: '.$e->getMessage());
-            return $this->error(['Failed to remove user from group'], 500);
+            return $this->error(['something went wrong'], 500);
+        }
+    }
+
+    //Get Group by ID
+    public function show(Request $request)
+    {
+        try{
+
+            $groupUser = Group::with('users')->findOrFail($request->id);
+            $group = $groupUser->only(['id', 'name', 'title', 'status']);
+            $member = $groupUser->users;
+            $data = [
+                'group' => $group,
+                'members' => $member
+            ];
+            return $this->success($data, 'Group fetched successfully');
+        }
+        catch(\Exception $e){
+            Log::error('Error show user from group: '.$e->getMessage());
+            return $this->error(['something went wrong'], 500);
         }
     }
 
@@ -33,9 +53,13 @@ class GroupUserController extends Controller
                 'user_ids.*'=> 'exists:users,id',
             ]);
 
-            // dd($validated);
+            $group = Group::with('users')->findOrFail($id);
 
-            $group = Group::findOrFail($id);
+            //A single group can have maximum 4 users or members
+            if($group->users->count() >= 4){
+                return $this->error(['Group user limit reached'], 400);
+            }
+
             if(isset($validated['user_id'])){
                 if(!$group->users->contains($validated['user_id'])){
                     $group->users()->attach($validated['user_id']);

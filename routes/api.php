@@ -34,6 +34,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::post('groups/user/{id}',[GroupUserController::class, 'store']);
         Route::get('groups/{group}/user',[GroupUserController::class, 'list']);
+        Route::get('group/{id}/user',[GroupUserController::class, 'show']);
         Route::delete('groups/{group}/user/{user_id}',[GroupUserController::class, 'removeUser']);
         
         //task assignment
